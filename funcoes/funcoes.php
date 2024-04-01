@@ -39,6 +39,63 @@ function buscandoRegistros($conexao){
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
+function buscandoRelatorio($conexao){
+    $sql = "SELECT 
+                    usuario.id, 
+                    usuario.valor,
+                    unidade.nome AS nome_unidade,
+                    usuario.nome, 
+                    COUNT(registros.id) AS total_registros,
+                    SUM(usuario.valor) AS total_valor
+                FROM 
+                    usuario 
+                INNER JOIN 
+                    registros ON registros.usuario_id = usuario.id 
+                INNER JOIN 
+                    unidade ON registros.unidade_id = unidade.id
+                WHERE 
+                    registros.status = 1
+                GROUP BY 
+                    usuario.id 
+                HAVING 
+                    COUNT(usuario.id) > 1;";
+
+    $stmt = $conexao->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function filtrandoRegistro($conexao, $ano, $mes){
+        $sql = "SELECT 
+                    usuario.id, 
+                    usuario.valor,
+                    unidade.nome AS nome_unidade,
+                    usuario.nome, 
+                    COUNT(registros.id) AS total_registros,
+                    SUM(usuario.valor) AS total_valor
+                FROM 
+                    usuario 
+                INNER JOIN 
+                    registros ON registros.usuario_id = usuario.id 
+                INNER JOIN 
+                    unidade ON registros.unidade_id = unidade.id
+                WHERE 
+                    registros.status = 1
+                AND
+                    (MONTH(registros.data) = :mes OR YEAR(registros.data) = :ano)
+                GROUP BY 
+                    usuario.id 
+                HAVING 
+                    COUNT(usuario.id) > 1";
+        $stmt = $conexao->prepare($sql);
+        $stmt->bindParam(':ano', $ano, PDO::PARAM_STR);
+        $stmt->bindParam(':mes', $mes, PDO::PARAM_STR);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+
+
 function buscandoProfessor($email, $conexao){
     $sql = "select * from usuario where email = :email";
     $stmt = $conexao->prepare($sql);

@@ -22,21 +22,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if(($usuario[0]['email'] != $email) || ($hash_fornecido != $hash_banco)) {
 
-        session_start();
+            session_start();
 
-         $_SESSION['mensagem.erro'] = 'Email ou senha incorretos';
-         header('Location: ../login.php');
+            $_SESSION['mensagem.erro'] = 'Email ou senha incorretos';
+            header('Location: ../login.php');
 
     } else {
 
-        session_start();
+            session_start();
 
-        $_SESSION['login'] = true;
-        $_SESSION['nome'] = $usuario[0]['nome'];
-        $_SESSION['id'] = $usuario[0]['id'];
-        $_SESSION['tipo'] = $usuario[0]['tipo'];
+            $_SESSION['login'] = true;
+            $_SESSION['nome'] = $usuario[0]['nome'];
+            $_SESSION['id'] = $usuario[0]['id'];
+            $_SESSION['tipo'] = $usuario[0]['tipo'];
 
-        header( 'Location: ../' );
+        if($_SESSION['tipo'] == 1){
+            header( 'Location: ../' );
+            exit();
+        } else {
+            header( 'Location: ../extrato.php' );
+            exit();
+        }
+
                 
 
     }

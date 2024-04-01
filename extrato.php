@@ -84,7 +84,7 @@ $registros = buscandoRegistrosProfessor($_SESSION['id'], $conexao);
 									<!-- Page Header -->
 									<div class="page-header">
 										<div class="row align-items-end pe-2">                                       
-                                            <h4 class=" page-title text-start"> Extrato horas - Samuel Gomes </h4>										
+                                            <h4 class=" page-title text-start"> Extrato horas - <?= $_SESSION['nome']; ?> </h4>										
 										</div>
 									</div>
 									<!-- /Page Header -->
@@ -103,11 +103,11 @@ $registros = buscandoRegistrosProfessor($_SESSION['id'], $conexao);
 											<?php $i = 0; ?>
 											<?php foreach($registros as $registro): ?>	
 											<tr>												
-												<td><?= $registros[$i]['data']; ?></td>
-												<td><?= $registros[$i]['hora_inicio']; ?></td>
-												<td><?= $registros[$i]['tipo']; ?></td>
-												<td><?= $registros[$i]['nome']; ?></td>
-												<td><?= $registros[$i]['status'] == 0 ? '<span class="badge bg-warning">Em Análise</span>' : '<span class="badge bg-success">Success</span>'; ?></td>						
+												<td><?= $registro['data']; ?></td>
+												<td><?= $registro['hora_inicio']; ?></td>
+												<td><?= $registro['tipo']; ?></td>
+												<td><?= $registro['nome']; ?></td>
+												<td><?= $registro['status'] == 0 ? '<span class="badge bg-warning">Em Análise</span>' : ($registros[$i]['status'] == 2 ? '<span class="badge bg-danger">Reprovado</span>' : '<span class="badge bg-success">Success</span>'); ?></td>						
 											</tr>											
 											<?php $i++; endforeach; ?>	
 										</tbody>

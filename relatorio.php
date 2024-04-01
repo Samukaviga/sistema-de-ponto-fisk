@@ -2,8 +2,20 @@
 require_once('header/head.php'); 
 require_once('header/header.php'); 
 require_once('header/sidebar.php');
-?>
+require_once('./conexao.php');
+require_once('./funcoes/funcoes.php');
 
+$relatorios = buscandoRelatorio($conexao);
+
+
+	$valor = 0;
+
+ foreach($relatorios as $r){
+		$valor += $r['total_valor'];	
+ }
+
+
+?>
 
 
 <!-- Page Wrapper -->
@@ -33,8 +45,8 @@ require_once('header/sidebar.php');
 									<label >Mês</label>
 									<select name="professor" id="professor" class="form-control" >
                             			<option value="" >Selecione o mês</option>
-                                        <option value="BIANCA" >1 -Janeiro</option>
-                                        <option value="CARLOS" >2 - Fevereiro</option>
+                                        <option value="1" >1 -Janeiro</option>
+                                        <option value="2" >2 - Fevereiro</option>
                            			 </select>
 								</div>
 							</div>
@@ -69,7 +81,7 @@ require_once('header/sidebar.php');
 									<!-- Page Header -->
 									<div class="page-header">
 										<div class="row align-items-end pe-2">                                       
-                                            <h4 class="text-end"> Total: R$ 200,00 </h4>										
+                                            <h4 class="text-end"> Total: R$ <?= $valor; ?>,00 </h4>										
 										</div>
 									</div>
 									<!-- /Page Header -->
@@ -81,22 +93,30 @@ require_once('header/sidebar.php');
 												<th>Nome</th>
 												<th>Qtd. Aulas</th>
 												<th>Qtd. Horas</th>
+												<th>Unidade</th>
 												<th>Valor Hora</th>
 												<th>Valor Total</th>
 										</thead>
 										<tbody>
+											<?php foreach($relatorios as $relatorio): 
+													
+													$horasAula = $relatorio['total_registros'] * 2;
+											?>
+											
 											<tr>												
 												<td>
 													<h2>
-														<a>Samuel Gomes</a>
+														<a><?= $relatorio['nome']; ?></a>
 													</h2>
 												</td>
-												<td>32</td>
-												<td>16</td>
-												<td>R$ 15.00</td>
-												<td>R$ 960,00</td>
+												<td><?= $relatorio['total_registros']; ?></td>
+												<td><?= $horasAula; ?></td>
+												<td><?= $relatorio['nome_unidade']; ?></td>
+												<td>R$ <?= $relatorio['valor']; ?>.00</td>
+												<td>R$ <?= $relatorio['total_valor']; ?>,00</td>
 											
-											</tr>											
+											</tr>
+											<?php endforeach; ?>											
 										</tbody>
 									</table>
 									

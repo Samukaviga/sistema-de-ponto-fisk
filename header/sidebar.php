@@ -8,8 +8,10 @@
                 <div class="sidebar-inner slimscroll">
 					<div id="sidebar-menu" class="sidebar-menu">
 						<ul>
-							<li class="menu-title"> 
-								<span>Administrador</span>
+							 
+
+							<li class="menu-title">
+								<span><?= $_SESSION['tipo'] == 1 ? 'Administrador' : 'Professor'?></span>
 							</li>
 							<?php if($_SESSION['tipo'] == 1 ): ?>
 							<li class="submenu">

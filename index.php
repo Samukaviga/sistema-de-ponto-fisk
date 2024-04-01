@@ -13,9 +13,16 @@ session_start();
 
 	$registros = buscandoRegistros($conexao);
 
+	if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    
+		$mes = $_POST['mes'];
+		$ano = $_POST['ano'];
+	
+		$filtro = filtrandoRegistro($conexao, $ano, $mes);
+	
+	}
+
 ?>
-
-
 
 <!-- Page Wrapper -->
 <div class="page-wrapper">
@@ -52,43 +59,45 @@ session_start();
 					<!-- /Page Header -->
 					
 					<div class="student-group-form mb-4" >
-						<div class="row">
-							<div class="col-lg-3 col-md-6">  
-								<div class="input-block local-forms">
-									<label >Professor</label>
-									<select name="professor" id="professor" class="form-control" >
-                            			<option value="" >Selecione o Professor</option>
-                                        <option value="BIANCA" >BIANCA</option>
-                                        <option value="CARLOS" >CARLOS</option>
-                           			 </select>
+						<form action="./" method="post">
+							<div class="row">
+								<div class="col-lg-3 col-md-6">  
+									<div class="input-block local-forms">
+										<label >Mês</label>
+										<select name="mes" id="mes" class="form-control" >
+											<option value="" >Selecione o mês</option>
+											<option value="1" >1 - Janeiro</option>
+											<option value="2" >2 - Fevereiro</option>
+											<option value="3" >3 - Março</option>
+											<option value="4" >4 - Abril</option>
+											<option value="5" >5 - Maio</option>
+											<option value="6" >6 - Junho</option>
+											<option value="7" >7 - Julho</option>
+											<option value="8" >8 - Agosto</option>
+											<option value="9" >9 - Setembro</option>
+											<option value="10" >10 - Outrubro</option>
+											<option value="11" >11 - Novembro</option>
+											<option value="12" >12 - Dezembro</option>
+										</select>
+									</div>
+								</div>
+								<div class="col-lg-3 col-md-6">  
+									<div class="input-block local-forms">
+										<label >Ano</label>
+										<select name="ano" id="ano" class="form-control" >
+											<option value="" >Selecione o ano</option>
+											<option value="2023" >2023</option>
+											<option value="2024" >2024</option>
+										</select>
+									</div>
+								</div>
+								<div class="col-lg-2">  
+									<div class="search-student-btn">
+										<button type="btn" class="btn btn-primary">Filtrar</button>
+									</div>
 								</div>
 							</div>
-							<div class="col-lg-3 col-md-6">  
-								<div class="input-block local-forms">
-									<label >Mês</label>
-									<select name="professor" id="professor" class="form-control" >
-                            			<option value="" >Selecione o mês</option>
-                                        <option value="BIANCA" >1 -Janeiro</option>
-                                        <option value="CARLOS" >2 - Fevereiro</option>
-                           			 </select>
-								</div>
-							</div>
-							<div class="col-lg-3 col-md-6">  
-								<div class="input-block local-forms">
-									<label >Ano</label>
-									<select name="professor" id="professor" class="form-control" >
-                            			<option value="" >Selecione o ano</option>
-                                        <option value="BIANCA" >2023</option>
-                                        <option value="CARLOS" >2024</option>
-                           			 </select>
-								</div>
-							</div>
-							<div class="col-lg-2">  
-								<div class="search-student-btn">
-									<button type="btn" class="btn btn-primary">Filtrar</button>
-								</div>
-							</div>
-						</div>
+						</form>
 					</div>
 				
 					<div class="row">
@@ -124,22 +133,21 @@ session_start();
 										<?php $i = 0; ?>
 										<?php foreach($registros as $registro): ?>
 										<tr>
-												
 												<td><?= $i; ?></td>
 												<td>
 													<h2>
-														<a><?= $registros[$i]['nome_usuario']; ?></a>
+														<a><?= $registro['nome_usuario']; ?></a>
 													</h2>
 												</td>
-												<td><?= $registros[$i]['data']; ?></td>
-												<td><?= $registros[$i]['hora_inicio']; ?></td>
-												<td><?= $registros[$i]['tipo']; ?></td>
-												<td><?= $registros[$i]['nome_unidade']; ?></td>
-												<td><?= $registros[$i]['status'] == 0 ? '<span class="badge bg-warning">Em Análise</span>' : ($registros[$i]['status'] == 1 ? '<span class="badge bg-success">Aprovado</span>' : '<span class="badge bg-danger">Reprovado</span>'); ?></td>
+												<td><?= $registro['data']; ?></td>
+												<td><?= $registro['hora_inicio']; ?></td>
+												<td><?= $registro['tipo']; ?></td>
+												<td><?= $registro['nome_unidade']; ?></td>
+												<td><?= $registro['status'] == 0 ? '<span class="badge bg-warning">Em Análise</span>' : ($registro['status'] == 1 ? '<span class="badge bg-success">Aprovado</span>' : '<span class="badge bg-danger">Reprovado</span>'); ?></td>
 												<td>
 													<div>
-														<a href="./funcoes/aprovar.php?id_registro=<?= $registros[$i]['id']; ?>" type="button" class="btn btn-outline-success me-1 mb-1" id="type-success">Aprovar</a>
-														<a href="./funcoes/reprovar.php?id_registro=<?= $registros[$i]['id']; ?>" type="button" class="btn btn-outline-danger me-1 mb-1" id="type-error">Reprovar</a>
+														<a href="./funcoes/aprovar.php?id_registro=<?= $registro['id']; ?>" type="button" class="btn btn-outline-success me-1 mb-1" id="type-success">Aprovar</a>
+														<a href="./funcoes/reprovar.php?id_registro=<?= $registro['id']; ?>" type="button" class="btn btn-outline-danger me-1 mb-1" id="type-error">Reprovar</a>
 													</div>
 												</td>
 											</tr>
